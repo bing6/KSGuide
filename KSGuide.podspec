@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "KSGuide"
   s.version      = "1.2"
-  s.summary      = "A short description of KSGuide."
+  s.summary      = "iOS App first start guide."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                   DESC
+                   iOS App first start guide
 
   s.homepage     = "https://github.com/bing6/KSGuide"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = "MIT (example)"
+  s.license      = "MIT (MIT)"
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
