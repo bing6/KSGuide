@@ -25,7 +25,12 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                   iOS App first start guide.
+                    A longer description of KSGuide in Markdown format.
+
+                    * Think: Why did you write this? What is the focus? What does it do?
+                    * CocoaPods will be using this to generate tags, and improve search results.
+                    * Try to keep it short, snappy and to the point.
+                    * Finally, don't worry about the indent, CocoaPods strips it!
                    DESC
 
   s.homepage     = "https://github.com/bing6/KSGuide"
