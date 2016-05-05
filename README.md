@@ -1,4 +1,7 @@
-#启动引导图,使用很简单,只要配置图片路径就可以了。代码如下
+
+#iOS App first start guide
+
+Setup
 
 ```
     NSMutableArray *paths = [NSMutableArray new];
@@ -11,7 +14,7 @@
     [[KSGuideManager shared] showGuideViewWithImages:paths];
 ```
 
-v1.2加入自定义Button功能
+Custom Button
 
 ```
     [[KSGuideManager shared] setDelegate:self];
@@ -29,3 +32,5 @@ v1.2加入自定义Button功能
     return button;
 }
 ```
+
+
