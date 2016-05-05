@@ -8,8 +8,6 @@
 
 #import "KSGuideManager.h"
 
-#define kScreenBounds [UIScreen mainScreen].bounds
-
 static NSString *identifier = @"Cell";
 
 @interface KSGuideViewCell : UICollectionViewCell
@@ -43,24 +41,8 @@ static NSString *identifier = @"Cell";
     self.imageView = [[UIImageView alloc] init];
     self.imageView.frame = kScreenBounds;
     self.imageView.center = CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height / 2);
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    button.hidden = YES;
-    [button setFrame:CGRectMake(0, 0, 200, 44)];
-    [button setTitle:@"Next" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [button.layer setCornerRadius:5];
-    [button.layer setBorderColor:[UIColor grayColor].CGColor];
-    [button.layer setBorderWidth:1.0f];
-    [button setBackgroundColor:[UIColor whiteColor]];
-    
-    self.button = button;
-    
+
     [self.contentView addSubview:self.imageView];
-    [self.contentView addSubview:self.button];
-    
-    [self.button setCenter:CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height - 100)];
 }
 
 @end
@@ -120,12 +102,20 @@ static NSString *identifier = @"Cell";
     return _pageControl;
 }
 
+- (void)clearMark {
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString *version = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    [ud removeObjectForKey:[NSString stringWithFormat:@"KSGuide_%@", version]];
+}
+
 - (void)showGuideViewWithImages:(NSArray *)images {
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     NSString *version = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
     //根据版本号来区分是否要显示引导图
-    BOOL show = [ud boolForKey:[NSString stringWithFormat:@"Guide_%@", version]];
+    BOOL show = [ud boolForKey:[NSString stringWithFormat:@"KSGuide_%@", version]];
+    
+    
     
     if (!show && self.window == nil) {
 
@@ -136,7 +126,7 @@ static NSString *identifier = @"Cell";
         [self.window addSubview:self.view];
         [self.window addSubview:self.pageControl];
         
-        [ud setBool:YES forKey:[NSString stringWithFormat:@"Guide_%@", version]];
+        [ud setBool:YES forKey:[NSString stringWithFormat:@"KSGuide_%@", version]];
         [ud synchronize];
     }
 }
@@ -163,13 +153,36 @@ static NSString *identifier = @"Cell";
     cell.imageView.center = CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height / 2);
 
     if (indexPath.row == self.images.count - 1) {
-        [cell.button setHidden:NO];
-        [cell.button addTarget:self action:@selector(nextButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
+        if (cell.button == nil) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(KSGuidLastPageButton)]) {
+                cell.button = [self.delegate KSGuidLastPageButton];
+                
+            } else {
+                cell.button = [self defaultButton];
+            }
+            [cell.button addTarget:self action:@selector(nextButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.contentView addSubview:cell.button];
+        }
     } else {
-        [cell.button setHidden:YES];
+        if (cell.button != nil) {
+            [cell.button removeFromSuperview];
+            [cell setButton:nil];
+        }
     }
-
     return cell;
+}
+
+- (UIButton *)defaultButton {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, 200, 44)];
+    [button setTitle:@"Next" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [button.layer setCornerRadius:5];
+    [button.layer setBorderColor:[UIColor grayColor].CGColor];
+    [button.layer setBorderWidth:1.0f];
+    [button setBackgroundColor:[UIColor whiteColor]];
+    [button setCenter:CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height - 100)];
+    return button;
 }
 
 - (CGSize)adapterSizeImageSize:(CGSize)is compareSize:(CGSize)cs
@@ -196,6 +209,10 @@ static NSString *identifier = @"Cell";
     [self setWindow:nil];
     [self setView:nil];
     [self setPageControl:nil];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(KSGuidLastPageButtonDidOnClick)]) {
+        [self.delegate KSGuidLastPageButtonDidOnClick];
+    }
 }
 
 @end

@@ -21,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		370782C71CDB3627009D7963 /* KSGuide.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KSGuide.podspec; sourceTree = "<group>"; };
 		37B305F81C9149470079B2B1 /* KSGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KSGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37B305FC1C9149470079B2B1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		37B305FE1C9149470079B2B1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		37B305EF1C9149470079B2B1 = {
 			isa = PBXGroup;
 			children = (
+				370782C71CDB3627009D7963 /* KSGuide.podspec */,
 				37B306121C9149690079B2B1 /* src */,
 				37B305FA1C9149470079B2B1 /* KSGuide */,
 				37B305F91C9149470079B2B1 /* Products */,
