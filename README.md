@@ -1,7 +1,7 @@
 
 #iOS App first start guide
 
-Setup
+#Setup
 
 ```
     NSMutableArray *paths = [NSMutableArray new];
@@ -14,7 +14,7 @@ Setup
     [[KSGuideManager shared] showGuideViewWithImages:paths];
 ```
 
-Custom Button
+#Custom Button
 
 ```
     [[KSGuideManager shared] setDelegate:self];
@@ -31,6 +31,14 @@ Custom Button
         [button setCenter:CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height - 100)];
     return button;
 }
+```
+
+#Installation
+
+```
+    platform:ios,'7.0'
+
+    pod 'KSGuide', '~> 1.2'
 ```
 
 
