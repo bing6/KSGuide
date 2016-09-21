@@ -26,8 +26,11 @@
     [paths addObject:[[NSBundle mainBundle] pathForResource:@"3" ofType:@"jpg"]];
     [paths addObject:[[NSBundle mainBundle] pathForResource:@"4" ofType:@"jpg"]];
     
+    //设置委托
     [[KSGuideManager shared] setDelegate:self];
-    [[KSGuideManager shared] clearMark];
+    //设置退出动画效果
+    [[KSGuideManager shared] setAnimationType:KSGuideAnimationTypeTop];
+//    [[KSGuideManager shared] clearMark];
     [[KSGuideManager shared] showGuideViewWithImages:paths];
 }
 

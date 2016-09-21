@@ -11,6 +11,15 @@
 
 #define kScreenBounds [UIScreen mainScreen].bounds
 
+typedef enum : NSUInteger {
+    KSGuideAnimationTypeNothing,
+    KSGuideAnimationTypeFadeOut,
+    KSGuideAnimationTypeLeft,
+    KSGuideAnimationTypeRight,
+    KSGuideAnimationTypeTop,
+    KSGuideAnimationTypeBottom
+} KSGuideAnimationType;
+
 @protocol  KSGuideDelegate <NSObject>
 
 @optional
@@ -30,8 +39,24 @@
 
 @interface KSGuideManager : NSObject
 
+/**
+ * 退出时动画效果,默认为淡出
+ */
+@property (nonatomic, assign) KSGuideAnimationType animationType;
+
+/**
+ * 动画执行时间
+ */
+@property (nonatomic, assign) CGFloat animationDuration;
+
+/**
+ * 委托
+ */
 @property (nonatomic, weak) id<KSGuideDelegate> delegate;
 
+/**
+ * 共享实例
+ */
 + (instancetype)shared;
 
 /**

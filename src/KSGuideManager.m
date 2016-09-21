@@ -58,6 +58,16 @@ static NSString *identifier = @"Cell";
 
 @implementation KSGuideManager
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.animationType = KSGuideAnimationTypeFadeOut;
+        self.animationDuration = 0.3f;
+    }
+    return self;
+}
+
 + (instancetype)shared {
     static id __staticObject = nil;
     static dispatch_once_t onceToken;
@@ -204,11 +214,37 @@ static NSString *identifier = @"Cell";
 
 - (void)nextButtonHandler:(id)sender {
 
-    [self.pageControl removeFromSuperview];
-    [self.view removeFromSuperview];
-    [self setWindow:nil];
-    [self setView:nil];
-    [self setPageControl:nil];
+    if (self.animationType != KSGuideAnimationTypeNothing) {
+        
+        __weak __typeof(&*self)ws = self;
+        
+        [UIView animateWithDuration:self.animationDuration animations:^{
+            if (ws.animationType == KSGuideAnimationTypeFadeOut) {
+                ws.view.alpha = 0;
+            } else if (ws.animationType == KSGuideAnimationTypeTop) {
+                ws.view.center = CGPointMake((kScreenBounds.size.width / 2), -(kScreenBounds.size.height / 2));
+            } else if (ws.animationType == KSGuideAnimationTypeBottom) {
+                ws.view.center = CGPointMake((kScreenBounds.size.width / 2), (kScreenBounds.size.height / 2) * 3);
+            } else if (ws.animationType == KSGuideAnimationTypeLeft) {
+                ws.view.center = CGPointMake(-(kScreenBounds.size.width / 2), (kScreenBounds.size.height / 2));
+            } else if (ws.animationType == KSGuideAnimationTypeRight) {
+                ws.view.center = CGPointMake((kScreenBounds.size.width / 2) * 3, (kScreenBounds.size.height / 2));
+            }
+            
+        } completion:^(BOOL finished) {
+            [ws.pageControl removeFromSuperview];
+            [ws.view removeFromSuperview];
+            [ws setWindow:nil];
+            [ws setView:nil];
+            [ws setPageControl:nil];
+        }];
+    } else {
+        [self.pageControl removeFromSuperview];
+        [self.view removeFromSuperview];
+        [self setWindow:nil];
+        [self setView:nil];
+        [self setPageControl:nil];
+    }
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(KSGuidLastPageButtonDidOnClick)]) {
         [self.delegate KSGuidLastPageButtonDidOnClick];
