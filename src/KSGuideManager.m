@@ -118,7 +118,7 @@ static NSString *identifier = @"Cell";
     [ud removeObjectForKey:[NSString stringWithFormat:@"KSGuide_%@", version]];
 }
 
-- (void)showGuideViewWithImages:(NSArray *)images {
+- (BOOL)showGuideViewWithImages:(NSArray *)images {
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     NSString *version = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
@@ -138,7 +138,9 @@ static NSString *identifier = @"Cell";
         
         [ud setBool:YES forKey:[NSString stringWithFormat:@"KSGuide_%@", version]];
         [ud synchronize];
+        return YES;
     }
+    return NO;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

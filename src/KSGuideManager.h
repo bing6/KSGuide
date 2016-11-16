@@ -68,7 +68,8 @@ typedef enum : NSUInteger {
  *  显示引导图片
  *
  *  @param images images
+ *  @return 是否显示了引导图
  */
-- (void)showGuideViewWithImages:(NSArray *)images;
+- (BOOL)showGuideViewWithImages:(NSArray *)images;
 
 @end
