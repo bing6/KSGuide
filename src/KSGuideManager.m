@@ -41,7 +41,8 @@ static NSString *identifier = @"Cell";
     self.imageView = [[UIImageView alloc] init];
     self.imageView.frame = kScreenBounds;
     self.imageView.center = CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height / 2);
-
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
     [self.contentView addSubview:self.imageView];
 }
 
@@ -50,13 +51,14 @@ static NSString *identifier = @"Cell";
 @interface KSGuideManager ()<UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
-@property (nonatomic, strong) UICollectionView *view;
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) UIPageControl *pageControl;
+@property (nonatomic, strong) UICollectionView *view;
 
 @end
 
 @implementation KSGuideManager
+@synthesize contentView = _contentView;
 
 - (instancetype)init
 {
@@ -75,6 +77,13 @@ static NSString *identifier = @"Cell";
         __staticObject = [KSGuideManager new];
     });
     return __staticObject;
+}
+
+- (UIView *)contentView {
+    if (!_contentView) {
+        _contentView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    }
+    return _contentView;
 }
 
 - (UICollectionView *)view {
@@ -124,18 +133,23 @@ static NSString *identifier = @"Cell";
     NSString *version = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
     //根据版本号来区分是否要显示引导图
     BOOL show = [ud boolForKey:[NSString stringWithFormat:@"KSGuide_%@", version]];
-    
-    
-    
+
     if (!show && self.window == nil) {
 
         self.images = images;
         self.pageControl.numberOfPages = images.count;
         self.window = [UIApplication sharedApplication].keyWindow;
         
-        [self.window addSubview:self.view];
-        [self.window addSubview:self.pageControl];
+        [self.contentView addSubview:self.view];
+        [self.contentView addSubview:self.pageControl];
+        [self.window addSubview:self.contentView];
         
+        if ([self.delegate respondsToSelector:@selector(isShowPageControl)]) {
+            self.pageControl.hidden = !([self.delegate isShowPageControl]);
+        }
+        if ([self.delegate respondsToSelector:@selector(KSGuidDidShowView:)]) {
+            [self.delegate KSGuidDidShowView:self];
+        }
         [ud setBool:YES forKey:[NSString stringWithFormat:@"KSGuide_%@", version]];
         [ud synchronize];
         return YES;
@@ -156,13 +170,13 @@ static NSString *identifier = @"Cell";
     KSGuideViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     
     NSString *path = [self.images objectAtIndex:indexPath.row];
-    UIImage *img = [UIImage imageWithContentsOfFile:path];
-    CGSize size = [self adapterSizeImageSize:img.size compareSize:kScreenBounds.size];
-    
-    //自适应图片位置,图片可以是任意尺寸,会自动缩放.
-    cell.imageView.frame = CGRectMake(0, 0, size.width, size.height);
+//    UIImage *img = [UIImage imageWithContentsOfFile:path];
+//    CGSize size = [self adapterSizeImageSize:img.size compareSize:kScreenBounds.size];
+//    
+//    //自适应图片位置,图片可以是任意尺寸,会自动缩放.
+    cell.imageView.frame = CGRectMake(0, 0, kScreenBounds.size.width, kScreenBounds.size.height);
     cell.imageView.image = [UIImage imageWithContentsOfFile:path];
-    cell.imageView.center = CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height / 2);
+//    cell.imageView.center = CGPointMake(kScreenBounds.size.width / 2, kScreenBounds.size.height / 2);
 
     if (indexPath.row == self.images.count - 1) {
         if (cell.button == nil) {
@@ -172,8 +186,10 @@ static NSString *identifier = @"Cell";
             } else {
                 cell.button = [self defaultButton];
             }
-            [cell.button addTarget:self action:@selector(nextButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.contentView addSubview:cell.button];
+            if (cell.button) {
+                [cell.button addTarget:self action:@selector(nextButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.contentView addSubview:cell.button];
+            }
         }
     } else {
         if (cell.button != nil) {
@@ -214,6 +230,10 @@ static NSString *identifier = @"Cell";
     self.pageControl.currentPage = (scrollView.contentOffset.x / kScreenBounds.size.width);
 }
 
+- (void)hideGuideView {
+    [self nextButtonHandler:nil];
+}
+
 - (void)nextButtonHandler:(id)sender {
 
     if (self.animationType != KSGuideAnimationTypeNothing) {
@@ -236,16 +256,21 @@ static NSString *identifier = @"Cell";
         } completion:^(BOOL finished) {
             [ws.pageControl removeFromSuperview];
             [ws.view removeFromSuperview];
+            [ws.contentView removeFromSuperview];
             [ws setWindow:nil];
-            [ws setView:nil];
             [ws setPageControl:nil];
+            [self setView:nil];
+            _contentView = nil;
         }];
     } else {
         [self.pageControl removeFromSuperview];
         [self.view removeFromSuperview];
+        [self.contentView removeFromSuperview];
         [self setWindow:nil];
-        [self setView:nil];
         [self setPageControl:nil];
+        [self setView:nil];
+        _contentView = nil;
+        
     }
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(KSGuidLastPageButtonDidOnClick)]) {

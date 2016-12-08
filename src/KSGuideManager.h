@@ -23,6 +23,15 @@ typedef enum : NSUInteger {
 @protocol  KSGuideDelegate <NSObject>
 
 @optional
+
+- (void)KSGuidDidShowView:(id)sender;
+
+/**
+ 是否显示分页
+
+ @return 是否
+ */
+- (BOOL)isShowPageControl;
 /**
  *  设置最后一页的跳转Button
  *
@@ -39,6 +48,7 @@ typedef enum : NSUInteger {
 
 @interface KSGuideManager : NSObject
 
+@property (nonatomic, strong, readonly) UIView *contentView;
 /**
  * 退出时动画效果,默认为淡出
  */
@@ -71,5 +81,10 @@ typedef enum : NSUInteger {
  *  @return 是否显示了引导图
  */
 - (BOOL)showGuideViewWithImages:(NSArray *)images;
+
+/**
+ 隐藏引导图
+ */
+- (void)hideGuideView;
 
 @end

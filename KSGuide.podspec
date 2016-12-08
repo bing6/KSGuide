@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "KSGuide"
-  s.version      = "1.4"
+  s.version      = "1.5"
   s.summary      = "iOS App first start guide."
 
   # This description is used to generate tags and improve search results.
@@ -85,7 +85,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/bing6/KSGuide.git", :tag => "1.4" }
+  s.source       = { :git => "https://github.com/bing6/KSGuide.git", :tag => "1.5" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

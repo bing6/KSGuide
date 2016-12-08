@@ -30,13 +30,38 @@
     [[KSGuideManager shared] setDelegate:self];
     //设置退出动画效果
     [[KSGuideManager shared] setAnimationType:KSGuideAnimationTypeTop];
-//    [[KSGuideManager shared] clearMark];
+    [[KSGuideManager shared] clearMark];
     [[KSGuideManager shared] showGuideViewWithImages:paths];
+    
+
+//
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)T:(id)sender {
+    [[KSGuideManager shared] hideGuideView];
+}
+
+- (void)KSGuidDidShowView:(id)sender {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, 200, 44)];
+    [button setTitle:@"Hi~~" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [button.layer setCornerRadius:5];
+    [button.layer setBorderColor:[UIColor grayColor].CGColor];
+    [button.layer setBorderWidth:1.0f];
+    [button setBackgroundColor:[UIColor whiteColor]];
+    [button addTarget:self action:@selector(T:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[KSGuideManager shared].contentView addSubview:button];
+}
+
+- (BOOL)isShowPageControl {
+    return false;
 }
 
 - (UIButton *)KSGuidLastPageButton {
