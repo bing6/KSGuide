@@ -242,15 +242,15 @@ static NSString *identifier = @"Cell";
         
         [UIView animateWithDuration:self.animationDuration animations:^{
             if (ws.animationType == KSGuideAnimationTypeFadeOut) {
-                ws.view.alpha = 0;
+                ws.contentView.alpha = 0;
             } else if (ws.animationType == KSGuideAnimationTypeTop) {
-                ws.view.center = CGPointMake((kScreenBounds.size.width / 2), -(kScreenBounds.size.height / 2));
+                ws.contentView.center = CGPointMake((kScreenBounds.size.width / 2), -(kScreenBounds.size.height / 2));
             } else if (ws.animationType == KSGuideAnimationTypeBottom) {
-                ws.view.center = CGPointMake((kScreenBounds.size.width / 2), (kScreenBounds.size.height / 2) * 3);
+                ws.contentView.center = CGPointMake((kScreenBounds.size.width / 2), (kScreenBounds.size.height / 2) * 3);
             } else if (ws.animationType == KSGuideAnimationTypeLeft) {
-                ws.view.center = CGPointMake(-(kScreenBounds.size.width / 2), (kScreenBounds.size.height / 2));
+                ws.contentView.center = CGPointMake(-(kScreenBounds.size.width / 2), (kScreenBounds.size.height / 2));
             } else if (ws.animationType == KSGuideAnimationTypeRight) {
-                ws.view.center = CGPointMake((kScreenBounds.size.width / 2) * 3, (kScreenBounds.size.height / 2));
+                ws.contentView.center = CGPointMake((kScreenBounds.size.width / 2) * 3, (kScreenBounds.size.height / 2));
             }
             
         } completion:^(BOOL finished) {

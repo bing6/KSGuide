@@ -29,7 +29,7 @@
     //设置委托
     [[KSGuideManager shared] setDelegate:self];
     //设置退出动画效果
-    [[KSGuideManager shared] setAnimationType:KSGuideAnimationTypeTop];
+    [[KSGuideManager shared] setAnimationType:KSGuideAnimationTypeFadeOut];
     [[KSGuideManager shared] clearMark];
     [[KSGuideManager shared] showGuideViewWithImages:paths];
     
